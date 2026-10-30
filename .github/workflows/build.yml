@@ -1,0 +1,83 @@
+name: Evim APK derle ve yayınla
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      notes:
+        description: "Güncelleme notu (kullanıcıya görünür)"
+        required: false
+        default: ""
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.47.8"
+          channel: stable
+          cache: true
+
+      - name: Gradle önbelleği
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('android/**/*.gradle*', 'android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      - name: Paketleri al
+        run: flutter pub get
+
+      - name: APK derle (arm64 · modern cihazlar)
+        run: flutter build apk --release --target-platform android-arm64
+
+      - name: Sürüm bilgisini oku
+        id: ver
+        run: |
+          LINE=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          NAME=$(echo "$LINE" | cut -d'+' -f1)
+          CODE=$(echo "$LINE" | cut -d'+' -f2)
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "code=$CODE" >> $GITHUB_OUTPUT
+          NOTES="${{ github.event.inputs.notes }}"
+          if [ -z "$NOTES" ]; then NOTES="$(git log -1 --pretty=%s)"; fi
+          echo "notes=$NOTES" >> $GITHUB_OUTPUT
+
+      - name: Supabase'e yükle ve sürümü kaydet
+        env:
+          REF: hbtypvlsiuqpcbypealk
+          SVC: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          NAME: ${{ steps.ver.outputs.name }}
+          CODE: ${{ steps.ver.outputs.code }}
+          NOTES: ${{ steps.ver.outputs.notes }}
+        run: |
+          APK=build/app/outputs/flutter-apk/app-release.apk
+          BYTES=$(stat -c%s "$APK")
+          echo "Yükleniyor: evim-$CODE.apk ($BYTES bayt)"
+          curl -sf -X POST "https://$REF.supabase.co/storage/v1/object/releases/evim-$CODE.apk" \
+            -H "Authorization: Bearer $SVC" -H "apikey: $SVC" -H "x-upsert: true" \
+            -H "Content-Type: application/vnd.android.package-archive" \
+            --data-binary "@$APK" > /dev/null
+          echo "Sürüm kaydı ekleniyor..."
+          curl -sf -X POST "https://$REF.supabase.co/rest/v1/app_releases" \
+            -H "apikey: $SVC" -H "Authorization: Bearer $SVC" \
+            -H "Content-Type: application/json" -H "Prefer: resolution=merge-duplicates" \
+            -d "{\"version_code\":$CODE,\"version_name\":\"$NAME\",\"notes\":\"$NOTES\",\"path\":\"evim-$CODE.apk\",\"bytes\":$BYTES}" > /dev/null
+          echo "Bitti: $NAME ($CODE) yayında."
+
+      - name: APK'yı GitHub'a da ekle
+        uses: actions/upload-artifact@v4
+        with:
+          name: Evim-${{ steps.ver.outputs.name }}
+          path: build/app/outputs/flutter-apk/app-release.apk

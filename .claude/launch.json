@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "evim-web",
+      "runtimeExecutable": "C:\\Users\\Baver\\dev\\flutter\\bin\\flutter.bat",
+      "runtimeArgs": ["run", "-d", "web-server", "--web-port", "8099"],
+      "port": 8099
+    }
+  ]
+}

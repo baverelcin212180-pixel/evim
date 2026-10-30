@@ -108,7 +108,7 @@
 
 <script>
 const logoSVG = `<svg viewBox="0 0 100 100"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--amber)"/><stop offset="1" stop-color="var(--teal)"/></linearGradient><mask id="hh"><path d="M50 22 L84 50 L16 50 Z" fill="#fff"/><rect x="26" y="46" width="48" height="32" rx="6" fill="#fff"/><rect x="43" y="56" width="14" height="22" rx="4" fill="#000"/></mask></defs><rect width="100" height="100" rx="26" fill="url(#gg)"/><rect width="100" height="100" fill="#15110a" mask="url(#hh)"/></svg>`;
-const top = (t) => `<div class="s-top"><div class="lg">${logoSVG}</div><div class="t">${t}</div></div>`;
+const scrTop = (t) => `<div class="s-top"><div class="lg">${logoSVG}</div><div class="t">${t}</div></div>`;
 const nav = (on) => {const items=[['Özet','ozet'],['Akış','akis'],['Mesai','mesai'],['Taksit','taksit'],['Borç','borc']];return `<div class="nav">${items.map(i=>`<div class="${i[1]===on?'on':''}"><div class="ic"></div>${i[0]}</div>`).join('')}</div>`;};
 
 const SLIDES = [
@@ -118,7 +118,7 @@ const SLIDES = [
     text: "Eviniz için gelir, gider, mesai, taksit, borç ve birikimi tek uygulamada toplayın. İki telefonda anında eşitlenir."
   },
   { // 1 - Android kurulum
-    screen: top('Kurulum · Android') + `<div class="install">
+    screen: scrTop('Kurulum · Android') + `<div class="install">
       <div class="step"><div class="num">1</div><div class="tx">Size gelen <b>indirme linkine</b> dokunun, Evim.apk insin.</div></div>
       <div class="step"><div class="num">2</div><div class="tx">“Bu kaynaktan kuruluma <b>izin ver</b>” deyin.</div></div>
       <div class="step"><div class="num">3</div><div class="tx"><b>Kur</b>’a basın, açın.</div></div>
@@ -127,7 +127,7 @@ const SLIDES = [
     text: "WhatsApp'tan gelen linke dokunun, “bilinmeyen kaynağa izin ver” deyip kurun. 30 saniye sürer."
   },
   { // 2 - iPhone kurulum
-    screen: top('Kurulum · iPhone') + `<div class="install">
+    screen: scrTop('Kurulum · iPhone') + `<div class="install">
       <div class="step"><div class="num">1</div><div class="tx"><b>Safari</b>'de Evim adresini açın.</div></div>
       <div class="step"><div class="num">2</div><div class="tx">Alttaki <b>Paylaş</b> (kutudan çıkan ok) simgesine basın.</div></div>
       <div class="step"><div class="num">3</div><div class="tx">“<b>Ana Ekrana Ekle</b>”yi seçin.</div></div>
@@ -143,13 +143,13 @@ const SLIDES = [
     text: "Her evin kendi kullanıcı adı ve şifresi var. Eşler aynı hesapla girer; iki telefon aynı defteri görür."
   },
   { // 4 - özet
-    screen: top('Özet') + `<div class="hero"><div class="k">EKİM · AY SONU KALAN</div><div class="v">18.750₺</div><div class="r"><span>Gelir 42.000₺</span><span>Gider 23.250₺</span></div></div>
+    screen: scrTop('Özet') + `<div class="hero"><div class="k">EKİM · AY SONU KALAN</div><div class="v">18.750₺</div><div class="r"><span>Gelir 42.000₺</span><span>Gider 23.250₺</span></div></div>
       <div class="cards"><div class="row"><div class="tile"><div class="l">Bu ay gelir</div><div class="n pos">42.000₺</div></div><div class="tile"><div class="l">Bu ay gider</div><div class="n neg">23.250₺</div></div></div></div>` + nav('ozet'),
     title: "Ay sonu tek bakışta",
     text: "Açılışta ay sonunda cebinizde ne kalacağını görürsünüz: gelir, gider ve kalan, anlık güncel."
   },
   { // 5 - gelir gider
-    screen: top('Gelir & Gider') + `<div class="row" style="gap:8px"><div class="tile"><div class="l">Gelir</div><div class="n pos">42.000₺</div></div><div class="tile"><div class="l">Gider</div><div class="n neg">23.250₺</div></div></div>
+    screen: scrTop('Gelir & Gider') + `<div class="row" style="gap:8px"><div class="tile"><div class="l">Gelir</div><div class="n pos">42.000₺</div></div><div class="tile"><div class="l">Gider</div><div class="n neg">23.250₺</div></div></div>
       <div class="cards"><div class="card"><div class="row"><span>Maaş</span><span class="big pos">+ 32.000₺</span></div></div>
       <div class="card"><div class="row"><span>Market · 28.10</span><span class="big neg">− 1.250₺</span></div></div>
       <div class="card"><div class="row"><span>Elektrik</span><span class="big neg">− 900₺</span></div></div></div>` + nav('akis'),
@@ -157,14 +157,14 @@ const SLIDES = [
     text: "Tek dokunuşla gelir ya da gider girin. Kategori seçin, tutarı yazın; liste ve özet anında güncellenir."
   },
   { // 6 - mesai takvim
-    screen: top('Mesai') + `<div class="row" style="gap:8px"><div class="tile"><div class="l">Bu ay</div><div class="n amb">21 gün</div></div><div class="tile"><div class="l">Kazanç</div><div class="n pos">28.400₺</div></div></div>
+    screen: scrTop('Mesai') + `<div class="row" style="gap:8px"><div class="tile"><div class="l">Bu ay</div><div class="n amb">21 gün</div></div><div class="tile"><div class="l">Kazanç</div><div class="n pos">28.400₺</div></div></div>
       <div class="grid7"><div class="day">1</div><div class="day n">2</div><div class="day m">3</div><div class="day n">4</div><div class="day s">5</div><div class="day n">6</div><div class="day">7</div><div class="day m">8</div><div class="day n">9</div><div class="day n">10</div><div class="day s">11</div><div class="day m">12</div><div class="day n">13</div><div class="day">14</div></div>
       <div style="margin-top:8px"><span class="pill on">Mesaili</span><span class="pill">Mesaisiz</span><span class="pill">Sabahlama</span></div>` + nav('mesai'),
     title: "Mesai takvimi",
     text: "Vardiyalı çalışana özel: güne dokunun, Mesaili / Mesaisiz / Sabahlama / Yarım gün seçin. Kazanç kendiliğinden gelire yazılır. İsterseniz giriş-çıkış saatiyle de ekleyebilirsiniz."
   },
   { // 7 - taksit
-    screen: top('Taksit & Ödemeler') + `<div class="mut" style="font-size:11px;margin-bottom:8px">Hazır: Tivibu, Netflix, Elektrik, İnternet…</div>
+    screen: scrTop('Taksit & Ödemeler') + `<div class="mut" style="font-size:11px;margin-bottom:8px">Hazır: Tivibu, Netflix, Elektrik, İnternet…</div>
       <div class="cards"><div class="card"><div class="row"><span><b>Konut kredisi</b></span><span class="big">7.500₺</span></div><div class="bar"><i style="width:40%"></i></div><div class="mut" style="margin-top:4px">24 / 60 taksit ödendi</div></div>
       <div class="card"><div class="row"><span>Tivibu</span><span class="big">149₺</span></div></div>
       <div class="card"><div class="row"><span>Elektrik</span><span class="big">900₺</span></div></div></div>` + nav('taksit'),
@@ -172,7 +172,7 @@ const SLIDES = [
     text: "Kredi, kira, kart taksitleri ve Tivibu/Netflix gibi abonelikler. Hazır isimlerden seçin ya da elle yazın; her ay ödenecekler otomatik çıkar."
   },
   { // 8 - borç + birikim
-    screen: top('Borç & Birikim') + `<div class="cards"><div class="card"><div class="mut">Bize borçlu</div><div class="row"><span><b>Ahmet</b></span><span class="big pos">3.000₺</span></div></div>
+    screen: scrTop('Borç & Birikim') + `<div class="cards"><div class="card"><div class="mut">Bize borçlu</div><div class="row"><span><b>Ahmet</b></span><span class="big pos">3.000₺</span></div></div>
       <div class="card"><div class="row"><span><b>Araba</b> birikimi</span><span class="big amb">%65</span></div><div class="bar"><i style="width:65%"></i></div><div class="mut" style="margin-top:4px">130.000₺ / 200.000₺</div></div></div>` + nav('borc'),
     title: "Borç defteri & birikim",
     text: "Kime borçlusunuz, size kim borçlu — tek yerde. Birikim hedefleri koyun, yüzdeyle ilerlemeyi görün."

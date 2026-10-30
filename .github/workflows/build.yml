@@ -39,6 +39,11 @@ jobs:
       - name: Paketleri al
         run: flutter pub get
 
+      - name: İmza anahtarını hazırla (secret'tan çöz)
+        env:
+          EVIM_KEYSTORE_B64: ${{ secrets.EVIM_KEYSTORE_B64 }}
+        run: echo "$EVIM_KEYSTORE_B64" | base64 -d > android/app/evim.keystore
+
       - name: APK derle (arm64 · modern cihazlar)
         run: flutter build apk --release --target-platform android-arm64
 

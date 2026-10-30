@@ -1,0 +1,253 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body style="margin:0"><title>Evim Tanıtım</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Oto-oynayan tanıtım: ortada telefon çerçevesi, içinde kayan ekranlar + altında anlatım */
+  :root{
+    --bg:#0b1016; --bg2:#0e1419; --panel:#161f27; --panel2:#212e39; --line:#2a3845;
+    --fg:#edf3f8; --muted:#93a4b3; --amber:#f2b33d; --teal:#3dd0a8; --danger:#ff8a80;
+    --f-display:'Sora',system-ui,sans-serif; --f-body:'Plus Jakarta Sans',system-ui,sans-serif;
+  }
+  :root[data-theme="light"]{ --bg:#eef2f5; --bg2:#f4f6f8; --panel:#fff; --panel2:#e8edf1; --line:#dce3ea; --fg:#13202b; --muted:#5c6b78; }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:radial-gradient(1200px 600px at 50% -10%, #13202c 0%, var(--bg) 60%);color:var(--fg);font-family:var(--f-body);
+    min-height:100%;display:flex;flex-direction:column;align-items:center;
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px}
+  :root[data-theme="light"] body{background:radial-gradient(1200px 600px at 50% -10%, #ffffff 0%, var(--bg) 60%)}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .brand svg{width:34px;height:34px}
+  .brand .n{font-family:var(--f-display);font-weight:800;font-size:19px;letter-spacing:-.02em}
+  .tag{font-size:12px;color:var(--muted);margin-bottom:14px;text-align:center}
+  .tag b{color:var(--amber)}
+  .stage{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center}
+  /* telefon çerçevesi */
+  .phone{width:260px;height:540px;border-radius:38px;background:#05080b;border:1px solid var(--line);
+    box-shadow:0 20px 60px rgba(0,0,0,.5), inset 0 0 0 6px #0a0f14;padding:10px;position:relative;flex:none}
+  .notch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:90px;height:20px;background:#05080b;border-radius:0 0 14px 14px;z-index:5}
+  .screen{width:100%;height:100%;border-radius:30px;overflow:hidden;background:var(--bg2);position:relative}
+  .slides{position:absolute;inset:0}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease, transform .5s ease;transform:scale(1.02);padding:22px 16px 16px;overflow:hidden}
+  .slide.on{opacity:1;transform:scale(1)}
+  /* ekran içi parçalar */
+  .s-top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .s-top .lg{width:26px;height:26px;border-radius:8px;flex:none}
+  .s-top .t{font-family:var(--f-display);font-weight:800;font-size:15px}
+  .hero{border-radius:18px;padding:14px;background:linear-gradient(135deg,var(--amber),var(--teal));color:#15110a}
+  .hero .k{font-size:9px;font-weight:800;letter-spacing:.08em}
+  .hero .v{font-family:var(--f-display);font-size:30px;font-weight:800;line-height:1}
+  .hero .r{display:flex;gap:14px;margin-top:6px;font-size:11px;font-weight:700}
+  .cards{display:flex;flex-direction:column;gap:9px;margin-top:11px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:11px 12px}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .mut{color:var(--muted);font-size:11px}
+  .big{font-family:var(--f-display);font-weight:800}
+  .pos{color:var(--teal)} .neg{color:var(--danger)} .amb{color:var(--amber)}
+  .tile{flex:1;background:var(--panel2);border-radius:13px;padding:10px}
+  .tile .l{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase}
+  .tile .n{font-family:var(--f-display);font-size:18px;font-weight:800;margin-top:2px}
+  .grid7{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+  .day{aspect-ratio:1;border:1px solid var(--line);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted)}
+  .day.n{background:color-mix(in srgb,var(--teal) 20%,transparent);border-color:transparent;color:var(--teal)}
+  .day.m{background:color-mix(in srgb,var(--amber) 22%,transparent);border-color:transparent;color:var(--amber)}
+  .day.s{background:color-mix(in srgb,var(--danger) 20%,transparent);border-color:transparent;color:var(--danger)}
+  .pill{display:inline-block;padding:6px 11px;border-radius:999px;border:1px solid var(--line);font-size:11px;font-weight:600;margin:3px 3px 0 0}
+  .pill.on{background:var(--amber);color:#15110a;border-color:var(--amber)}
+  .bar{height:9px;border-radius:999px;background:var(--panel2);overflow:hidden;margin-top:6px}
+  .bar>i{display:block;height:100%;border-radius:999px;background:var(--amber)}
+  .nav{position:absolute;left:0;right:0;bottom:0;height:46px;background:var(--panel);border-top:1px solid var(--line);display:flex}
+  .nav div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:8px;color:var(--muted)}
+  .nav div.on{color:var(--amber)}
+  .nav .ic{width:15px;height:15px;border-radius:4px;border:2px solid currentColor}
+  .btnbig{background:var(--amber);color:#15110a;border-radius:12px;padding:11px;text-align:center;font-weight:800;font-size:13px;margin-top:10px}
+  .install{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .step{display:flex;gap:10px;align-items:flex-start}
+  .step .num{width:22px;height:22px;border-radius:50%;background:var(--amber);color:#15110a;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+  .step .tx{font-size:12px}
+  .logo-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;text-align:center}
+  .logo-wrap .big-logo{width:82px;height:82px}
+  .logo-wrap h2{font-family:var(--f-display);font-size:30px;margin:0;font-weight:800}
+  /* anlatım */
+  .caption{max-width:340px;margin-top:16px;text-align:center;min-height:62px}
+  .caption h3{font-family:var(--f-display);font-size:19px;margin:0 0 4px;font-weight:800;text-wrap:balance}
+  .caption p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5}
+  /* kontroller */
+  .dots{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap;max-width:340px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--line);border:none;padding:0;cursor:pointer}
+  .dot.on{background:var(--amber);width:22px;border-radius:999px}
+  .ctrl{display:flex;gap:10px;align-items:center;margin-top:14px}
+  .ctrl button{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:11px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--f-body)}
+  .ctrl button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  .ctrl .play{background:var(--amber);color:#15110a;border-color:var(--amber)}
+  .foot{margin-top:18px;color:var(--muted);font-size:11px;text-align:center}
+  .foot b{color:var(--amber)}
+  @media (prefers-reduced-motion:reduce){.slide{transition:opacity .2s}}
+</style>
+
+<div class="brand">
+  <svg viewBox="0 0 100 100" aria-label="Evim"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--amber)"/><stop offset="1" stop-color="var(--teal)"/></linearGradient><mask id="h"><path d="M50 22 L84 50 L16 50 Z" fill="#fff"/><rect x="26" y="46" width="48" height="32" rx="6" fill="#fff"/><rect x="43" y="56" width="14" height="22" rx="4" fill="#000"/></mask></defs><rect width="100" height="100" rx="26" fill="url(#g)"/><rect width="100" height="100" fill="#15110a" mask="url(#h)"/></svg>
+  <div class="n">Evim</div>
+</div>
+<div class="tag">Hane bütçesi · gelir, gider, mesai, taksit, borç, birikim &nbsp;·&nbsp; <b>Tabelacı Dijital</b></div>
+
+<div class="stage">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="slides" id="slides"></div>
+    </div>
+  </div>
+  <div class="caption" id="caption"></div>
+  <div class="dots" id="dots"></div>
+  <div class="ctrl">
+    <button id="prev" aria-label="Önceki">‹</button>
+    <button id="play" class="play">🔊 Sesli oynat</button>
+    <button id="next" aria-label="Sonraki">›</button>
+  </div>
+</div>
+<div class="foot">Evim · <b>Tabelacı Dijital</b> tarafından hazırlandı</div>
+
+<script>
+const logoSVG = `<svg viewBox="0 0 100 100"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--amber)"/><stop offset="1" stop-color="var(--teal)"/></linearGradient><mask id="hh"><path d="M50 22 L84 50 L16 50 Z" fill="#fff"/><rect x="26" y="46" width="48" height="32" rx="6" fill="#fff"/><rect x="43" y="56" width="14" height="22" rx="4" fill="#000"/></mask></defs><rect width="100" height="100" rx="26" fill="url(#gg)"/><rect width="100" height="100" fill="#15110a" mask="url(#hh)"/></svg>`;
+const top = (t) => `<div class="s-top"><div class="lg">${logoSVG}</div><div class="t">${t}</div></div>`;
+const nav = (on) => {const items=[['Özet','ozet'],['Akış','akis'],['Mesai','mesai'],['Taksit','taksit'],['Borç','borc']];return `<div class="nav">${items.map(i=>`<div class="${i[1]===on?'on':''}"><div class="ic"></div>${i[0]}</div>`).join('')}</div>`;};
+
+const SLIDES = [
+  { // 0 - açılış
+    screen: `<div class="logo-wrap"><div class="big-logo">${logoSVG}</div><h2>Evim</h2><div class="mut" style="font-size:13px">Hane bütçeniz tek yerde</div></div>`,
+    title: "Evim'e hoş geldiniz",
+    text: "Eviniz için gelir, gider, mesai, taksit, borç ve birikimi tek uygulamada toplayın. İki telefonda anında eşitlenir."
+  },
+  { // 1 - Android kurulum
+    screen: top('Kurulum · Android') + `<div class="install">
+      <div class="step"><div class="num">1</div><div class="tx">Size gelen <b>indirme linkine</b> dokunun, Evim.apk insin.</div></div>
+      <div class="step"><div class="num">2</div><div class="tx">“Bu kaynaktan kuruluma <b>izin ver</b>” deyin.</div></div>
+      <div class="step"><div class="num">3</div><div class="tx"><b>Kur</b>’a basın, açın.</div></div>
+      <div class="btnbig">⬇ Evim'i indir</div></div>`,
+    title: "Android'e kurulum",
+    text: "WhatsApp'tan gelen linke dokunun, “bilinmeyen kaynağa izin ver” deyip kurun. 30 saniye sürer."
+  },
+  { // 2 - iPhone kurulum
+    screen: top('Kurulum · iPhone') + `<div class="install">
+      <div class="step"><div class="num">1</div><div class="tx"><b>Safari</b>'de Evim adresini açın.</div></div>
+      <div class="step"><div class="num">2</div><div class="tx">Alttaki <b>Paylaş</b> (kutudan çıkan ok) simgesine basın.</div></div>
+      <div class="step"><div class="num">3</div><div class="tx">“<b>Ana Ekrana Ekle</b>”yi seçin.</div></div>
+      <div class="step"><div class="num">4</div><div class="tx">Ana ekrandaki Evim simgesinden açın — uygulama gibi çalışır.</div></div></div>`,
+    title: "iPhone'a kurulum",
+    text: "iPhone'da indirme gerekmez: Safari'de açıp “Ana Ekrana Ekle” deyin, uygulama gibi durur ve açılır."
+  },
+  { // 3 - giriş
+    screen: `<div class="logo-wrap"><div class="big-logo">${logoSVG}</div><h2>Evim</h2>
+      <div style="width:100%"><div class="card" style="margin-top:4px">Kullanıcı adı</div><div class="card" style="margin-top:8px">••••••</div><div class="btnbig">Giriş yap</div></div>
+      <div class="mut" style="font-size:11px">Her hane kendi kullanıcı adıyla girer</div></div>`,
+    title: "Giriş",
+    text: "Her evin kendi kullanıcı adı ve şifresi var. Eşler aynı hesapla girer; iki telefon aynı defteri görür."
+  },
+  { // 4 - özet
+    screen: top('Özet') + `<div class="hero"><div class="k">EKİM · AY SONU KALAN</div><div class="v">18.750₺</div><div class="r"><span>Gelir 42.000₺</span><span>Gider 23.250₺</span></div></div>
+      <div class="cards"><div class="row"><div class="tile"><div class="l">Bu ay gelir</div><div class="n pos">42.000₺</div></div><div class="tile"><div class="l">Bu ay gider</div><div class="n neg">23.250₺</div></div></div></div>` + nav('ozet'),
+    title: "Ay sonu tek bakışta",
+    text: "Açılışta ay sonunda cebinizde ne kalacağını görürsünüz: gelir, gider ve kalan, anlık güncel."
+  },
+  { // 5 - gelir gider
+    screen: top('Gelir & Gider') + `<div class="row" style="gap:8px"><div class="tile"><div class="l">Gelir</div><div class="n pos">42.000₺</div></div><div class="tile"><div class="l">Gider</div><div class="n neg">23.250₺</div></div></div>
+      <div class="cards"><div class="card"><div class="row"><span>Maaş</span><span class="big pos">+ 32.000₺</span></div></div>
+      <div class="card"><div class="row"><span>Market · 28.10</span><span class="big neg">− 1.250₺</span></div></div>
+      <div class="card"><div class="row"><span>Elektrik</span><span class="big neg">− 900₺</span></div></div></div>` + nav('akis'),
+    title: "Gelir ve gider ekle",
+    text: "Tek dokunuşla gelir ya da gider girin. Kategori seçin, tutarı yazın; liste ve özet anında güncellenir."
+  },
+  { // 6 - mesai takvim
+    screen: top('Mesai') + `<div class="row" style="gap:8px"><div class="tile"><div class="l">Bu ay</div><div class="n amb">21 gün</div></div><div class="tile"><div class="l">Kazanç</div><div class="n pos">28.400₺</div></div></div>
+      <div class="grid7"><div class="day">1</div><div class="day n">2</div><div class="day m">3</div><div class="day n">4</div><div class="day s">5</div><div class="day n">6</div><div class="day">7</div><div class="day m">8</div><div class="day n">9</div><div class="day n">10</div><div class="day s">11</div><div class="day m">12</div><div class="day n">13</div><div class="day">14</div></div>
+      <div style="margin-top:8px"><span class="pill on">Mesaili</span><span class="pill">Mesaisiz</span><span class="pill">Sabahlama</span></div>` + nav('mesai'),
+    title: "Mesai takvimi",
+    text: "Vardiyalı çalışana özel: güne dokunun, Mesaili / Mesaisiz / Sabahlama / Yarım gün seçin. Kazanç kendiliğinden gelire yazılır. İsterseniz giriş-çıkış saatiyle de ekleyebilirsiniz."
+  },
+  { // 7 - taksit
+    screen: top('Taksit & Ödemeler') + `<div class="mut" style="font-size:11px;margin-bottom:8px">Hazır: Tivibu, Netflix, Elektrik, İnternet…</div>
+      <div class="cards"><div class="card"><div class="row"><span><b>Konut kredisi</b></span><span class="big">7.500₺</span></div><div class="bar"><i style="width:40%"></i></div><div class="mut" style="margin-top:4px">24 / 60 taksit ödendi</div></div>
+      <div class="card"><div class="row"><span>Tivibu</span><span class="big">149₺</span></div></div>
+      <div class="card"><div class="row"><span>Elektrik</span><span class="big">900₺</span></div></div></div>` + nav('taksit'),
+    title: "Taksit ve abonelikler",
+    text: "Kredi, kira, kart taksitleri ve Tivibu/Netflix gibi abonelikler. Hazır isimlerden seçin ya da elle yazın; her ay ödenecekler otomatik çıkar."
+  },
+  { // 8 - borç + birikim
+    screen: top('Borç & Birikim') + `<div class="cards"><div class="card"><div class="mut">Bize borçlu</div><div class="row"><span><b>Ahmet</b></span><span class="big pos">3.000₺</span></div></div>
+      <div class="card"><div class="row"><span><b>Araba</b> birikimi</span><span class="big amb">%65</span></div><div class="bar"><i style="width:65%"></i></div><div class="mut" style="margin-top:4px">130.000₺ / 200.000₺</div></div></div>` + nav('borc'),
+    title: "Borç defteri & birikim",
+    text: "Kime borçlusunuz, size kim borçlu — tek yerde. Birikim hedefleri koyun, yüzdeyle ilerlemeyi görün."
+  },
+  { // 9 - eşitleme
+    screen: `<div class="logo-wrap"><div style="display:flex;gap:16px;align-items:center"><div style="width:44px;height:74px;border:2px solid var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center">📱</div><div style="font-size:22px;color:var(--teal)">⇄</div><div style="width:44px;height:74px;border:2px solid var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center">📱</div></div><h2 style="font-size:22px">Anında eşitleme</h2><div class="mut" style="font-size:12px;padding:0 10px">Bir telefonda girilen, diğerinde hemen görünür</div></div>`,
+    title: "İki telefon, tek defter",
+    text: "Eşinizin girdiği gider sizin telefonunuzda anında belirir. İnternet yokken bile kaydınız kaybolmaz; bağlanınca kendiliğinden gönderilir."
+  },
+  { // 10 - kapanış
+    screen: `<div class="logo-wrap"><div class="big-logo">${logoSVG}</div><h2>Evim</h2><div class="mut" style="font-size:13px;padding:0 14px">Gece / Gündüz tema · çöp kutusu · güvenli</div><div style="margin-top:6px;font-weight:800;color:var(--amber)">Tabelacı Dijital</div></div>`,
+    title: "Hazırsınız!",
+    text: "Evim ailenizin bütçesini sade ve güvenli tutar. Hayırlı olsun — Tabelacı Dijital."
+  }
+];
+
+const slidesEl = document.getElementById('slides');
+const dotsEl = document.getElementById('dots');
+const capEl = document.getElementById('caption');
+SLIDES.forEach((s,i)=>{
+  const d = document.createElement('div'); d.className='slide'+(i===0?' on':''); d.innerHTML=s.screen; slidesEl.appendChild(d);
+  const b = document.createElement('button'); b.className='dot'+(i===0?' on':''); b.setAttribute('aria-label','Adım '+(i+1)); b.onclick=()=>go(i); dotsEl.appendChild(b);
+});
+// Türkçe seslendirme metinleri (tarayıcı sesiyle okunur)
+const VOICE = [
+  "Evim'e hoş geldiniz. Eviniz için gelir, gider, mesai, taksit, borç ve birikimi tek uygulamada toplayın. İki telefonda anında eşitlenir.",
+  "Android'e kurulum çok kolay. Size gelen indirme linkine dokunun, bilinmeyen kaynağa izin verin ve kur deyin. Otuz saniyede hazır.",
+  "iPhone'da indirmeye gerek yok. Safari'de adresi açın, alttaki paylaş simgesine basın ve ana ekrana ekle deyin. Artık uygulama gibi açılır.",
+  "Her evin kendi kullanıcı adı ve şifresi vardır. Eşler aynı hesapla girer ve iki telefon aynı defteri görür.",
+  "Açılışta ay sonunda cebinizde ne kalacağını görürsünüz. Gelir, gider ve kalan tutar her an günceldir.",
+  "Gelir ya da gideri tek dokunuşla ekleyin. Kategori seçin, tutarı yazın; liste ve özet anında güncellenir.",
+  "Vardiyalı çalışan için mesai takvimi var. Güne dokunun; mesaili, mesaisiz, sabahlama ya da yarım gün seçin. Kazanç kendiliğinden gelire yazılır. İsterseniz giriş ve çıkış saatiyle de girebilirsiniz.",
+  "Kredi, kira ve kart taksitleri; Tivibu, Netflix gibi abonelikler burada. Hazır isimlerden seçin ya da elle yazın. Her ay ödenecekler otomatik çıkar.",
+  "Kime borçlu olduğunuzu, size kimin borçlu olduğunu tek yerde tutun. Birikim hedefleri koyun, ilerlemeyi yüzdeyle görün.",
+  "Bir telefonda girilen, diğerinde anında görünür. İnternet yokken bile kaydınız kaybolmaz; bağlanınca kendiliğinden gönderilir.",
+  "Evim, ailenizin bütçesini sade ve güvenli tutar. Hayırlı olsun. Tabelacı Dijital."
+];
+
+let idx=0, playing=true, narrate=false, timer=null;
+const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+let trVoice=null;
+function pickVoice(){ if(!synth) return; const vs=synth.getVoices()||[]; trVoice = vs.find(v=>v.lang && v.lang.toLowerCase().startsWith('tr')) || vs.find(v=>/turk|türk/i.test(v.name)) || null; }
+if(synth){ pickVoice(); synth.onvoiceschanged=pickVoice; }
+
+function render(){
+  [...slidesEl.children].forEach((e,i)=>e.classList.toggle('on',i===idx));
+  [...dotsEl.children].forEach((e,i)=>e.classList.toggle('on',i===idx));
+  capEl.innerHTML = `<h3>${SLIDES[idx].title}</h3><p>${SLIDES[idx].text}</p>`;
+}
+function go(i){ idx=(i+SLIDES.length)%SLIDES.length; render(); schedule(); }
+function schedule(){
+  clearTimeout(timer);
+  if(synth) synth.cancel();
+  if(!playing) return;
+  if(narrate && synth){
+    const u=new SpeechSynthesisUtterance(VOICE[idx]);
+    u.lang='tr-TR'; if(trVoice) u.voice=trVoice; u.rate=1.0; u.pitch=1.0;
+    u.onend=()=>{ if(playing && narrate) timer=setTimeout(()=>go(idx+1), 700); };
+    u.onerror=()=>{ if(playing && narrate) timer=setTimeout(()=>go(idx+1), 3500); };
+    // güvence: ses takılırsa yine ilerle
+    timer=setTimeout(()=>{ if(playing && narrate) go(idx+1); }, Math.max(7000, VOICE[idx].length*95));
+    synth.speak(u);
+  } else {
+    timer=setTimeout(()=>go(idx+1), 4600);
+  }
+}
+document.getElementById('next').onclick=()=>go(idx+1);
+document.getElementById('prev').onclick=()=>go(idx-1);
+const playBtn=document.getElementById('play');
+function updateBtn(){ playBtn.textContent = !playing ? '▶ Devam et' : (narrate ? '⏸ Duraklat' : '🔊 Sesli oynat'); }
+playBtn.onclick=()=>{
+  if(!narrate && playing){ narrate=true; idx=0; render(); schedule(); } // sesli anlatımı baştan başlat
+  else { playing=!playing; schedule(); }                                 // duraklat / devam
+  updateBtn();
+};
+render(); schedule(); updateBtn();
+</script>
+</body></html>
